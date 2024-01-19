@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Produtos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Listagem de Produtos</h1>
+
+    <table class="table" id="produtosTable">
+        <thead>
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Valor Unitário</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Produtos entram dinamicamente aqui nesta região por meio do AJAX -->
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-3 d-flex align-items-center justify-content-center">
+ <a href="/telafuncionario.html" class="btn btn-secondary">Voltar para Tela de Funcionário</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Adicione isso ao seu HTML, geralmente no final do corpo do documento -->
+<script>
+$(document).ready(function () {
+    $.ajax({
+        url: '/produto/listarProdutos',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            if (response.produtos && response.produtos.length > 0) {
+                var produtosTable = $('#produtosTable tbody');
+                $.each(response.produtos, function (index, produto) {
+                    var row = '<tr>' +
+                        '<td>' + produto.nome + '</td>' +
+                        '<td>' + produto.quantidade + '</td>' +
+                        '<td>' + produto.valorunitario + '</td>' +
+                        '</tr>';
+                    produtosTable.append(row);
+                });
+            } else {
+                alert('Nenhum produto encontrado.');
+            }
+        },
+        error: function (error) {
+            console.error('Erro ao obter a lista de produtos:', error);
+            alert('Erro ao obter a lista de produtos.');
+        }
+    });
+});
+</script>
+
+
+</body>
+</html>
