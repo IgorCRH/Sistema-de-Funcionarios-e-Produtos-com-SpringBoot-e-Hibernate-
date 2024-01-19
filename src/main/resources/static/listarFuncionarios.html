@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Funcionários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Listagem de Funcionários</h1>
+
+    <table class="table" id="funcionariosTable">
+        <thead>
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">CPF</th>
+            <th scope="col">Salário</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Funcionários entram dinamicamente aqui nesta região por meio do AJAX -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function () {
+    $.ajax({
+        url: '/gerente/listarFuncionarios',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            if (response.funcionarios && response.funcionarios.length > 0) {
+                var funcionariosTable = $('#funcionariosTable tbody');
+                $.each(response.funcionarios, function (index, funcionario) {
+                    var row = '<tr>' +
+                        '<td>' + funcionario.nome + '</td>' +
+                        '<td>' + funcionario.cpf + '</td>' +
+                        '<td>' + funcionario.salario + '</td>' +
+                        '</tr>';
+                    funcionariosTable.append(row);
+                });
+            } else {
+                alert('Nenhum funcionário encontrado.');
+            }
+        },
+        error: function (error) {
+            console.error('Erro ao obter a lista de funcionários:', error);
+            alert('Erro ao obter a lista de funcionários.');
+        }
+    });
+});
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Produtos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Buscar Produtos</h1>
+
+    <form id="formPesquisaNome">
+        <div class="mb-3">
+            <label for="nomeProduto" class="form-label">Nome do Produto:</label>
+            <input type="text" class="form-control" id="nomeProduto" placeholder="Digite o nome">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="pesquisarPorNome()">Pesquisar por Nome</button>
+    </form>
+
+    <form id="formPesquisaID">
+        <div class="mb-3">
+            <label for="idProduto" class="form-label">ID do Produto:</label>
+            <input type="text" class="form-control" id="idProduto" placeholder="Digite o ID">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="pesquisarPorID()">Pesquisar por ID</button>
+    </form>
+    
+    <div class="container mt-3 d-flex align-items-center justify-content-center">
+    <a href="/telafuncionario.html" class="btn btn-secondary">Voltar para Tela de Funcionário</a>
+    </div>
+
+    <table class="table" id="resultadosTable">
+        <thead>
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Valor Unitário</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Preenchimento dinâmico da tabela por AJAX -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function pesquisarPorNome() {
+        var nomeProduto = $('#nomeProduto').val();
+
+        $.ajax({
+            url: '/produto/pesquisarPorNome',
+            method: 'GET',
+            data: { nomeProduto: nomeProduto },
+            dataType: 'json',
+            success: function (response) {
+                exibirResultados(response);
+            },
+            error: function (error) {
+                console.error('Erro ao obter o produto por nome:', error);
+                alert('Erro ao obter o produto por nome.');
+            }
+        });
+    }
+
+    function pesquisarPorID() {
+        var idProduto = $('#idProduto').val();
+
+        $.ajax({
+            url: '/produto/pesquisarPorID',
+            method: 'GET',
+            data: { idProduto: idProduto },
+            dataType: 'json',
+            success: function (response) {
+                exibirResultados(response);
+            },
+            error: function (error) {
+                console.error('Erro ao obter o produto por ID:', error);
+                alert('Erro ao obter o produto por ID.');
+            }
+        });
+    }
+
+    function exibirResultados(response) {
+        console.log('Resultados da pesquisa:', response);
+        var resultadosTable = $('#resultadosTable tbody');
+        resultadosTable.empty();
+
+        if (response.produtos && response.produtos.length > 0) {
+            $.each(response.produtos, function (index, produto) {
+                var row = '<tr>' +
+                    '<td>' + produto.nome + '</td>' +
+                    '<td>' + produto.quantidade + '</td>' +
+                    '<td>' + produto.valorunitario + '</td>' +
+                    '</tr>';
+                resultadosTable.append(row);
+            });
+        } else {
+            alert('Nenhum funcionário encontrado.');
+        }
+    }
+</script>
+
+</body>
+</html>
