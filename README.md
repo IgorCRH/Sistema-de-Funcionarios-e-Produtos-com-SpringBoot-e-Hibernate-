@@ -1,5 +1,5 @@
 ## Descrição
-Um sistema CRUD de inserção, administração e listagem de funcionários e produtos utilizando a linguagem Java e as tecnologias SpringBoot, Hibernate, JSON, AJAX e Bootstrap para o HTML.
+Um sistema CRUD/API Rest de inserção, administração e listagem de funcionários e produtos utilizando a linguagem Java e as tecnologias SpringBoot, Hibernate, JSON, AJAX e Bootstrap para o HTML.
 
 ## Funcionalidades
 Funcionário:
